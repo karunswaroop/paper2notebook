@@ -1,5 +1,8 @@
+import logging
 from fastapi import APIRouter, File, Form, UploadFile, HTTPException
 import nbformat
+
+logger = logging.getLogger(__name__)
 
 from backend.services.pdf_parser import extract_text_from_pdf
 from backend.services.llm_service import generate_notebook_content
@@ -47,8 +50,9 @@ async def generate_notebook(
     except Exception as e:
         detail = str(e)
         if "auth" in detail.lower() or "api key" in detail.lower():
-            raise HTTPException(status_code=401, detail="Invalid OpenAI API key.")
-        raise HTTPException(status_code=502, detail=f"LLM generation failed: {detail}")
+            raise HTTPException(status_code=401, detail="Invalid API key.")
+        logger.error("LLM generation failed: %s", detail)
+        raise HTTPException(status_code=502, detail="LLM generation failed. Please try again.")
 
     # 4. Build notebook
     title = extracted["full_text"][:100].split("\n")[0].strip() or "Research Paper"

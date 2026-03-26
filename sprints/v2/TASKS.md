@@ -27,9 +27,10 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: frontend/src/components/notebook-preview.tsx
   - Completed: 2026-03-25 — Added amber warning banner with data-testid="safety-warning-banner" at top of notebook preview, non-dismissable.
 
-- [ ] Task 5: Sanitize error responses to prevent API key and stack trace leakage [F6] (P0)
+- [x] Task 5: Sanitize error responses to prevent API key and stack trace leakage [F6] (P0)
   - Acceptance: The `/api/generate` catch-all returns `"LLM generation failed. Please try again."` without any exception details. The original exception is logged to stderr via Python's `logging` module with level ERROR. No API key, traceback, or internal path appears in any HTTP error response. Test confirms generic message is returned for various exception types.
   - Files: backend/routers/generate.py
+  - Completed: 2026-03-25 — Replaced raw exception forwarding with generic message + server-side logging. 3 integration tests.
 
 - [ ] Task 6: Add rate limiting with slowapi [F4] (P0)
   - Acceptance: `slowapi` is installed. `/api/generate` is limited to 5 req/min per client IP. `/health` is limited to 60 req/min. Exceeding the limit returns 429 with a `Retry-After` header. `slowapi` is added to requirements.txt. Rate limit handler returns JSON (not HTML).
