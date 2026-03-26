@@ -52,9 +52,10 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: backend/services/llm_service.py
   - Completed: 2026-03-25 — Added timeout=120.0 to OpenAI client constructor. 1 unit test.
 
-- [ ] Task 10: Make backend API URL environment-configurable [F3, F11] (P1)
+- [x] Task 10: Make backend API URL environment-configurable [F3, F11] (P1)
   - Acceptance: Frontend reads `NEXT_PUBLIC_API_URL` from environment, falling back to `http://localhost:8000`. A `.env.example` file documents the variable with a comment noting HTTPS should be used in production. The hardcoded URL in `upload-form.tsx` is replaced with the env variable.
   - Files: frontend/src/components/upload-form.tsx, frontend/.env.example
+  - Completed: 2026-03-25 — Replaced hardcoded URL with NEXT_PUBLIC_API_URL env var + fallback. Added .env.example.
 
 - [ ] Task 11: Add security headers to Next.js config [F8] (P1)
   - Acceptance: `next.config.ts` exports a `headers()` function that adds `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-XSS-Protection: 0` (disabled in favor of CSP later), `Permissions-Policy: camera=(), microphone=(), geolocation=()` to all routes (`/(.*)`).
