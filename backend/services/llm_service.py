@@ -70,7 +70,7 @@ Generate code cells with working Python code and markdown cells with clear expla
 
 def generate_notebook_content(paper_text: str, api_key: str) -> list[dict]:
     """Call GPT-4o to generate notebook cells from paper text."""
-    client = OpenAI(api_key=api_key)
+    client = OpenAI(api_key=api_key, timeout=120.0)
 
     response = client.chat.completions.create(
         model="gpt-4o",

@@ -47,9 +47,10 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: backend/main.py
   - Completed: 2026-03-25 — Added SecurityHeadersMiddleware with 5 headers on all responses. 2 integration tests.
 
-- [ ] Task 9: Add explicit timeout to OpenAI client [F12] (P1)
+- [x] Task 9: Add explicit timeout to OpenAI client [F12] (P1)
   - Acceptance: The `OpenAI` client is constructed with `timeout=120.0`. If the API hangs beyond 120 seconds, a timeout error is raised and caught by the existing error handler (returning a generic message). No change to external behavior — just prevents indefinite blocking.
   - Files: backend/services/llm_service.py
+  - Completed: 2026-03-25 — Added timeout=120.0 to OpenAI client constructor. 1 unit test.
 
 - [ ] Task 10: Make backend API URL environment-configurable [F3, F11] (P1)
   - Acceptance: Frontend reads `NEXT_PUBLIC_API_URL` from environment, falling back to `http://localhost:8000`. A `.env.example` file documents the variable with a comment noting HTTPS should be used in production. The hardcoded URL in `upload-form.tsx` is replaced with the env variable.
