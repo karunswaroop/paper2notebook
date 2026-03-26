@@ -1,6 +1,8 @@
 import logging
-from fastapi import APIRouter, File, Form, UploadFile, HTTPException
+from fastapi import APIRouter, File, Form, Request, UploadFile, HTTPException
 import nbformat
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 
 logger = logging.getLogger(__name__)
 
@@ -9,12 +11,15 @@ from backend.services.llm_service import generate_notebook_content
 from backend.services.notebook_builder import build_notebook
 
 router = APIRouter()
+limiter = Limiter(key_func=get_remote_address)
 
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
 
 
 @router.post("/api/generate")
+@limiter.limit("5/minute")
 async def generate_notebook(
+    request: Request,
     file: UploadFile = File(...),
     api_key: str = Form(...),
 ):

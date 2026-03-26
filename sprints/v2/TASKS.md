@@ -32,9 +32,10 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: backend/routers/generate.py
   - Completed: 2026-03-25 — Replaced raw exception forwarding with generic message + server-side logging. 3 integration tests.
 
-- [ ] Task 6: Add rate limiting with slowapi [F4] (P0)
+- [x] Task 6: Add rate limiting with slowapi [F4] (P0)
   - Acceptance: `slowapi` is installed. `/api/generate` is limited to 5 req/min per client IP. `/health` is limited to 60 req/min. Exceeding the limit returns 429 with a `Retry-After` header. `slowapi` is added to requirements.txt. Rate limit handler returns JSON (not HTML).
   - Files: backend/main.py, backend/requirements.txt
+  - Completed: 2026-03-25 — Added slowapi with per-IP limits: 5/min on generate, 60/min on health. JSON 429 handler. 3 integration tests.
 
 - [ ] Task 7: Tighten CORS to minimum required configuration [F7] (P1)
   - Acceptance: `allow_methods` is `["GET", "POST"]`. `allow_headers` is `["Content-Type"]`. `allow_credentials` remains `True`. `allow_origins` remains `["http://localhost:3000"]`. Frontend form submission still works end-to-end.
