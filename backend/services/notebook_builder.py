@@ -1,4 +1,30 @@
+import re
 import nbformat
+
+_DANGEROUS_PATTERNS = [
+    (r"\bos\.system\b", "os.system"),
+    (r"\bsubprocess\b", "subprocess"),
+    (r"\beval\s*\(", "eval("),
+    (r"\bexec\s*\(", "exec("),
+    (r"\b__import__\b", "__import__"),
+    (r"\bcompile\s*\(", "compile("),
+    (r'\bopen\s*\([^)]*["\'][wax+]["\']', "open("),
+    (r"\brequests\.", "requests."),
+    (r"\burllib\b", "urllib"),
+    (r"\bsocket\b", "socket"),
+    (r"\bshutil\.rmtree\b", "shutil.rmtree"),
+]
+
+_WARNING_COMMENT = "# WARNING: This cell contains potentially unsafe code. Review before running."
+
+
+def scan_code_cell(source: str) -> list[str]:
+    """Scan a code cell for dangerous patterns. Returns list of matched pattern names."""
+    flagged = []
+    for pattern, name in _DANGEROUS_PATTERNS:
+        if re.search(pattern, source):
+            flagged.append(name)
+    return flagged
 
 
 def build_notebook(cells: list[dict], paper_title: str) -> nbformat.NotebookNode:
@@ -42,6 +68,9 @@ def build_notebook(cells: list[dict], paper_title: str) -> nbformat.NotebookNode
         cell_type = cell.get("cell_type", "markdown")
         source = cell.get("source", "")
         if cell_type == "code":
+            flags = scan_code_cell(source)
+            if flags:
+                source = f"{_WARNING_COMMENT}\n{source}"
             nb.cells.append(nbformat.v4.new_code_cell(source))
         else:
             nb.cells.append(nbformat.v4.new_markdown_cell(source))
