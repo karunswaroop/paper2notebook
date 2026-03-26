@@ -12,9 +12,10 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: backend/routers/generate.py, backend/services/pdf_parser.py
   - Completed: 2026-03-25 — Added MAX_FILE_SIZE (50MB) check in generate.py, MAX_PAGES (200) check in pdf_parser.py. 5 unit + 4 integration tests.
 
-- [ ] Task 2: Sanitize extracted PDF text before LLM prompt [F1] (P0)
+- [x] Task 2: Sanitize extracted PDF text before LLM prompt [F1] (P0)
   - Acceptance: A `sanitize_text()` function strips/neutralizes prompt-injection patterns: delimiter faking (`--- END PAPER TEXT ---`), instruction overrides (`ignore all previous instructions`, `you are now`, `system:`), and role injection (`<|im_start|>`, `[INST]`). Sanitized text is truncated to 100k chars. Tests cover all listed injection patterns.
   - Files: backend/services/llm_service.py
+  - Completed: 2026-03-25 — Added sanitize_text() with 11 regex patterns, MAX_TEXT_LENGTH=100k, wired into build_prompt(). 8 unit tests.
 
 - [ ] Task 3: Add code cell safety scanner to notebook builder [F1, F5] (P0)
   - Acceptance: A `scan_code_cell()` function detects dangerous patterns: `os.system`, `subprocess`, `eval`, `exec`, `__import__`, `compile`, `open(` with write modes, `requests.`, `urllib`, `socket`, `shutil.rmtree`. Flagged cells get a `# WARNING: This cell contains potentially unsafe code. Review before running.` comment prepended. Function returns a list of flagged patterns. Tests cover all blocked patterns plus clean code that should pass.

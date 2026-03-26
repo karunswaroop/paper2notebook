@@ -1,5 +1,33 @@
 import json
+import re
 from openai import OpenAI
+
+MAX_TEXT_LENGTH = 100_000
+
+# Patterns that could be used for prompt injection
+_INJECTION_PATTERNS = [
+    # Delimiter faking
+    r"---\s*(?:END\s+)?PAPER\s+TEXT\s*---",
+    # Instruction overrides
+    r"ignore\s+all\s+previous\s+instructions",
+    r"you\s+are\s+now\s+",
+    r"system\s*:",
+    r"disregard\s+(?:all\s+)?(?:previous|above|prior)\s+",
+    # Role injection tokens
+    r"<\|im_start\|>",
+    r"<\|im_end\|>",
+    r"\[INST\]",
+    r"\[/INST\]",
+    r"<<SYS>>",
+    r"<</SYS>>",
+]
+
+
+def sanitize_text(text: str) -> str:
+    """Strip prompt-injection patterns and truncate to safe length."""
+    for pattern in _INJECTION_PATTERNS:
+        text = re.sub(pattern, "", text, flags=re.IGNORECASE | re.MULTILINE)
+    return text[:MAX_TEXT_LENGTH]
 
 SYSTEM_PROMPT = """You are an expert at converting research papers into educational Google Colab tutorial notebooks.
 
@@ -30,12 +58,13 @@ Guidelines:
 
 
 def build_prompt(paper_text: str) -> str:
+    safe_text = sanitize_text(paper_text)
     return f"""Convert the following research paper into a tutorial notebook.
 Focus on implementing the key algorithms, methodology, and include visualization/plot cells.
 Generate code cells with working Python code and markdown cells with clear explanations.
 
 --- PAPER TEXT ---
-{paper_text}
+{safe_text}
 --- END PAPER TEXT ---"""
 
 
