@@ -57,9 +57,10 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: frontend/src/components/upload-form.tsx, frontend/.env.example
   - Completed: 2026-03-25 — Replaced hardcoded URL with NEXT_PUBLIC_API_URL env var + fallback. Added .env.example.
 
-- [ ] Task 11: Add security headers to Next.js config [F8] (P1)
+- [x] Task 11: Add security headers to Next.js config [F8] (P1)
   - Acceptance: `next.config.ts` exports a `headers()` function that adds `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-XSS-Protection: 0` (disabled in favor of CSP later), `Permissions-Policy: camera=(), microphone=(), geolocation=()` to all routes (`/(.*)`).
   - Files: frontend/next.config.ts
+  - Completed: 2026-03-25 — Added headers() to next.config.ts with 5 security headers on all routes.
 
 - [ ] Task 12: Add structured server-side request logging [F9] (P2)
   - Acceptance: Python `logging` is configured with structured format: timestamp, client IP, method, path, status code, duration. Every `/api/generate` request logs: client IP, filename, file size, and outcome (success/error). Sensitive data (API keys) is NEVER logged. Logging config is in `main.py` at startup. Provides audit trail until full auth is added in v3.
