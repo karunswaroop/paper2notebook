@@ -37,9 +37,10 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: backend/main.py, backend/requirements.txt
   - Completed: 2026-03-25 — Added slowapi with per-IP limits: 5/min on generate, 60/min on health. JSON 429 handler. 3 integration tests.
 
-- [ ] Task 7: Tighten CORS to minimum required configuration [F7] (P1)
+- [x] Task 7: Tighten CORS to minimum required configuration [F7] (P1)
   - Acceptance: `allow_methods` is `["GET", "POST"]`. `allow_headers` is `["Content-Type"]`. `allow_credentials` remains `True`. `allow_origins` remains `["http://localhost:3000"]`. Frontend form submission still works end-to-end.
   - Files: backend/main.py
+  - Completed: 2026-03-25 — Restricted allow_methods to GET/POST, allow_headers to Content-Type. 4 integration tests.
 
 - [ ] Task 8: Add security headers middleware to FastAPI [F8] (P1)
   - Acceptance: A custom middleware adds these headers to every response: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy: camera=(), microphone=(), geolocation=()`, `Cache-Control: no-store` (on API responses). Headers are verified present on both `/health` and `/api/generate` responses.
