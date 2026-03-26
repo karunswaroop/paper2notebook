@@ -1,4 +1,5 @@
 import logging
+import time
 from fastapi import APIRouter, File, Form, Request, UploadFile, HTTPException
 import nbformat
 from slowapi import Limiter
@@ -23,6 +24,9 @@ async def generate_notebook(
     file: UploadFile = File(...),
     api_key: str = Form(...),
 ):
+    start_time = time.monotonic()
+    client_ip = request.client.host if request.client else "unknown"
+
     if not file.filename or not file.filename.lower().endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are accepted.")
 
@@ -31,6 +35,10 @@ async def generate_notebook(
 
     # 1. Read PDF bytes with size limit
     pdf_bytes = await file.read()
+    logger.info(
+        "POST /api/generate client=%s filename=%s size=%d bytes",
+        client_ip, file.filename, len(pdf_bytes),
+    )
 
     if len(pdf_bytes) > MAX_FILE_SIZE:
         raise HTTPException(
@@ -62,5 +70,11 @@ async def generate_notebook(
     # 4. Build notebook
     title = extracted["full_text"][:100].split("\n")[0].strip() or "Research Paper"
     nb = build_notebook(cells, title)
+
+    duration = time.monotonic() - start_time
+    logger.info(
+        "POST /api/generate client=%s outcome=success duration=%.2fs cells=%d",
+        client_ip, duration, len(cells),
+    )
 
     return {"notebook": nbformat.from_dict(nb)}

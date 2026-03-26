@@ -1,6 +1,6 @@
 # Sprint v2 — Tasks
 
-## Status: In Progress
+## Status: Complete
 
 ### Audit Finding Map
 Each task references the audit finding(s) it resolves: [F1]–[F12].
@@ -62,6 +62,7 @@ Each task references the audit finding(s) it resolves: [F1]–[F12].
   - Files: frontend/next.config.ts
   - Completed: 2026-03-25 — Added headers() to next.config.ts with 5 security headers on all routes.
 
-- [ ] Task 12: Add structured server-side request logging [F9] (P2)
+- [x] Task 12: Add structured server-side request logging [F9] (P2)
   - Acceptance: Python `logging` is configured with structured format: timestamp, client IP, method, path, status code, duration. Every `/api/generate` request logs: client IP, filename, file size, and outcome (success/error). Sensitive data (API keys) is NEVER logged. Logging config is in `main.py` at startup. Provides audit trail until full auth is added in v3.
   - Files: backend/main.py, backend/routers/generate.py
+  - Completed: 2026-03-26 — Added logging.basicConfig in main.py, structured request/response logging in generate.py. API keys never logged. 2 integration tests. conftest.py added for rate limit reset.
