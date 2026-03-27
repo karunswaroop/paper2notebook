@@ -1,6 +1,11 @@
 .env
+.env.*
+!.env.example
 .venv/
 node_modules/
 __pycache__/
 .pytest_cache/
 .next/
+aws_cred*
+*.pem
+*.key
