@@ -9,3 +9,9 @@ __pycache__/
 aws_cred*
 *.pem
 *.key
+terraform/.terraform/
+*.tfstate
+*.tfstate.backup
+.playwright-mcp/
+paper2notebook_tutorial.ipynb
+AttentionIsAllYouNeed.pdf
